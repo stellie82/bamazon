@@ -16,14 +16,14 @@ CREATE TABLE products (
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES
 	("Hatchet", "Books", 5.99, 15),
-    ("1984", "Books", 7.95, 10),
+    ("1984", "Books", 7.95, 15),
     ("Dark Matter", "Books", 6.50, 20),
     ("Milk", "Food", 2.50, 50),
     ("Chex Mix", "Food", 4.50, 20),
-    ("Frozen Lego Set", "Toys", 30.00, 5),
+    ("Frozen Lego Set", "Toys", 30.00, 10),
     ("Wrench", "Tools", 10.25, 10),
     ("Hammer", "Tools", 7.95, 10),
-    ("Toaster Oven", "Kitchen", 25.00, 5),
+    ("Toaster Oven", "Kitchen", 25.00, 10),
     ("Microwave", "Kitchen", "35.50", 10)
     ;
 
