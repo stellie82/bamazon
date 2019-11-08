@@ -79,6 +79,8 @@ function userPrompt() {
                             console.log("The total cost of your purchase today is: $" + (parseInt(answer.quantity) * response[0].price).toFixed(2));
                         }
                     )
+                } else {
+                    console.log("Sorry, there are not enough of those items in stock.");
                 };
                 connection.end();
             });
