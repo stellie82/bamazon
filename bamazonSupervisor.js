@@ -36,5 +36,34 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connection works");
-    connection.end();
+    menuOptions();
 });
+
+// Create a function to prompt a list of menu options
+function menuOptions() {
+    inquirer
+        .prompt([
+            {
+                name: "menu",
+                type: "list",
+                message: "What would you like to do today?",
+                choices: [
+                    "View Product Sales by Department",
+                    "Create New Department",
+                    "Exit"
+                ],
+            },
+        ]).then(function (answer) {
+            switch (answer.menu) {
+                case "View Product Sales by Department":
+                    viewSalesDept();
+                    break;
+                case "Create New Department":
+                    createDept();
+                    break;
+                case "Exit":
+                    connection.end();
+                    break;
+            }
+        });
+}

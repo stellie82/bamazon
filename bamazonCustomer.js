@@ -28,6 +28,7 @@ function displayItems() {
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +
+                "Product Sales: $" + (response[i].price * response[i].stock_quantity).toFixed(2) + " | " +
                 "Stock quantity: " + response[i].stock_quantity
             );
         }
@@ -87,3 +88,5 @@ function userPrompt() {
 
         });
 }
+
+// Make sure your app still updates the inventory listed in the products column.
