@@ -9,6 +9,7 @@ CREATE TABLE products (
   product_name VARCHAR(100),
   department_name VARCHAR(100),
   price DECIMAL(5,2),
+  product_sales DECIMAL(10,4) NULL,
   stock_quantity INT(10),
   PRIMARY KEY (item_id)
 );
@@ -26,5 +27,11 @@ VALUES
     ("Toaster Oven", "Kitchen", 25.00, 10),
     ("Microwave", "Kitchen", "35.50", 10)
     ;
+
+CREATE TABLE departments (
+	department_id INT(10) NOT NULL AUTO_INCREMENT,
+    department_name VARCHAR(100),
+    over_head_costs DECIMAL(10,4)
+);
 
 SELECT * FROM products;
