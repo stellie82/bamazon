@@ -24,7 +24,7 @@ function displayItems() {
         // console.log(response);
         for (i = 0; i < response.length; i++) {
             console.log(
-                "ID: " + response[i].item_id + " | " +
+                "\nID: " + response[i].item_id + " | " +
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +

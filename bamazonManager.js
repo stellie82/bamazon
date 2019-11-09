@@ -1,18 +1,3 @@
-// Challenge #2: Manager View (Next Level)
-
-// Create a new Node application called bamazonManager.js. Running this application will:
-
-// List a set of menu options:
-// View Products for Sale
-// View Low Inventory
-// Add to Inventory
-// Add New Product
-
-// If a manager selects View Products for Sale, the app should list every available item: the item IDs, names, prices, and quantities.
-// If a manager selects View Low Inventory, then it should list all items with an inventory count lower than five.
-// If a manager selects Add to Inventory, your app should display a prompt that will let the manager "add more" of any item currently in the store.
-// If a manager selects Add New Product, it should allow the manager to add a completely new product to the store.
-
 // Required node modules and files
 var inquirer = require("inquirer");
 var mysql = require("mysql");
@@ -44,13 +29,146 @@ function menuOptions() {
                     "View Products for Sale",
                     "View Low Inventory",
                     "Add to Inventory",
-                    "Add New Product"
+                    "Add New Product",
+                    "Exit"
                 ],
             },
         ]).then(function (answer) {
-            console.log(answer);
-            connection.end();
+            switch (answer.menu) {
+                case "View Products for Sale":
+                    viewProducts();
+                    break;
+                case "View Low Inventory":
+                    viewInventory();
+                    break;
+                case "Add to Inventory":
+                    addInventory();
+                    break;
+                case "Add New Product":
+                    addProduct();
+                    break;
+                case "Exit":
+                    connection.end();
+                    break;
+            }
         });
 }
 
+// Create a function to display all items in the database
+function viewProducts() {
+    connection.query("SELECT * FROM products;", function (error, response) {
+        if (error) throw error;
+        for (i = 0; i < response.length; i++) {
+            console.log(
+                "\nID: " + response[i].item_id + " | " +
+                "Item: " + response[i].product_name + " | " +
+                "Department: " + response[i].department_name + " | " +
+                "Price: $" + response[i].price.toFixed(2) + " | " +
+                "Stock quantity: " + response[i].stock_quantity
+            );
+        }
+        menuOptions();
+    });
+}
 
+// Create a function to display all items in the database with an inventory count of less than 5
+function viewInventory() {
+    var query = "SELECT * FROM products GROUP BY item_id HAVING stock_quantity > 5";
+    connection.query(query, function (error, response) {
+        if (error) throw error;
+        for (i = 0; i < response.length; i++) {
+            console.log(
+                "\nID: " + response[i].item_id + " | " +
+                "Item: " + response[i].product_name + " | " +
+                "Department: " + response[i].department_name + " | " +
+                "Price: $" + response[i].price + " | " +
+                "Stock quantity: " + response[i].stock_quantity
+            );
+        }
+        menuOptions();
+    });
+}
+
+// Create a function to add inventory for a specific item in the database
+function addInventory() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "What is the ID of the product you would like to add inventory for?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How many units of item would you like to add?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ]).then(function (answer) {
+            connection.query("SELECT * FROM products WHERE ?", { item_id: answer.id }, function (error, response) {
+                if (error) throw error;
+                var new_quantity = response[0].stock_quantity + parseInt(answer.quantity);
+                connection.query("UPDATE products SET ? WHERE ?",
+                    [
+                        { stock_quantity: new_quantity },
+                        { item_id: answer.id }
+                    ],
+                    function (error) {
+                        if (error) throw error;
+                        console.log("Your items have been added successfully");
+                        connection.end();
+                    })
+            })
+        })
+}
+
+// Create a function to be able to add a new product to the database
+function addProduct() {
+    inquirer
+        .prompt([
+            {
+                name: "item",
+                type: "input",
+                message: "What is the name of the item you would like to add?"
+            },
+            {
+                name: "department",
+                type: "list",
+                message: "What department would you like to put this item under?",
+                choices: ["Books", "Food", "Toys", "Tools", "Kitchen"]
+            },
+            {
+                name: "price",
+                type: "input",
+                message: "What is the price of your item?"
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How many units of the item would you like to add?"
+            }
+        ]).then(function (answer) {
+            connection.query("INSERT INTO products SET ?",
+                {
+                    product_name: answer.item,
+                    department_name: answer.department,
+                    price: answer.price,
+                    stock_quantity: answer.quantity
+                }, function (error) {
+                    if (error) throw error;
+                    console.log("Your new item has been added successfully.");
+                    connection.end();
+                })
+        })
+}
