@@ -14,27 +14,8 @@ var connection = mysql.createConnection({
 // Connect to the MySQL server and database
 connection.connect(function (err) {
     if (err) throw err;
-    updateProductSales();
-});
-
-function updateProductSales() {
-    connection.query("SELECT * FROM products;", function (error, response) {
-        if (error) throw error;
-        // console.log(response);
-        for (i = 0; i < response.length; i++) {
-            // console.log(response[i]);
-            connection.query("UPDATE products SET ? WHERE ?",
-                [
-                    { product_sales: response[i].price * response[i].stock_quantity },
-                    { item_id: i + 1 }
-                ],
-                function (error, res) {
-                    if (error) throw error;
-                })
-        }
-    })
     displayItems();
-}
+});
 
 // Create a function to display all items in the database
 function displayItems() {
@@ -88,9 +69,10 @@ function userPrompt() {
                 if (error) throw error;
                 if (response[0].stock_quantity > answer.quantity) {
                     var new_quantity = response[0].stock_quantity - parseInt(answer.quantity);
+                    var new_sale = parseInt(answer.quantity) * response[0].price;
                     connection.query("UPDATE products SET ? WHERE ?",
                         [
-                            { stock_quantity: new_quantity },
+                            { stock_quantity: new_quantity, product_sales: response[0].product_sales + new_sale },
                             { item_id: answer.id }
                         ],
                         function (error) {
@@ -102,11 +84,8 @@ function userPrompt() {
                 } else {
                     console.log("Sorry, there are not enough of those items in stock.");
                 };
-
                 connection.end();
             });
 
         });
 }
-
-// Make sure your app still updates the inventory listed in the products column.
