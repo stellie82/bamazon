@@ -14,12 +14,31 @@ var connection = mysql.createConnection({
 // Connect to the MySQL server and database
 connection.connect(function (err) {
     if (err) throw err;
-    displayItems();
+    updateProductSales();
 });
+
+function updateProductSales() {
+    connection.query("SELECT * FROM products;", function (error, response) {
+        if (error) throw error;
+        // console.log(response);
+        for (i = 0; i < response.length; i++) {
+            // console.log(response[i]);
+            connection.query("UPDATE products SET ? WHERE ?",
+                [
+                    { product_sales: response[i].price * response[i].stock_quantity },
+                    { item_id: i + 1 }
+                ],
+                function (error, res) {
+                    if (error) throw error;
+                })
+        }
+    })
+    displayItems();
+}
 
 // Create a function to display all items in the database
 function displayItems() {
-    connection.query("SELECT *FROM products;", function (error, response) {
+    connection.query("SELECT * FROM products;", function (error, response) {
         if (error) throw error;
         // console.log(response);
         for (i = 0; i < response.length; i++) {
@@ -28,7 +47,7 @@ function displayItems() {
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +
-                "Product Sales: $" + (response[i].price * response[i].stock_quantity).toFixed(2) + " | " +
+                "Product Sales: $" + parseFloat(response[i].product_sales).toFixed(2) + " | " +
                 "Stock quantity: " + response[i].stock_quantity
             );
         }
@@ -83,6 +102,7 @@ function userPrompt() {
                 } else {
                     console.log("Sorry, there are not enough of those items in stock.");
                 };
+
                 connection.end();
             });
 
