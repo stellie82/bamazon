@@ -48,5 +48,6 @@ VALUES
 
 SELECT departments.department_id, departments.department_name, SUM(products.product_sales) AS product_sales, departments.overhead_costs,
 SUM(products.product_sales) - departments.overhead_costs AS total_profit
-FROM products INNER JOIN departments on products.department_name = departments.department_name 
+FROM departments LEFT JOIN products on departments.department_name = products.department_name 
 GROUP BY departments.department_id, departments.department_name, departments.overhead_costs
+ORDER BY departments.department_id ASC;

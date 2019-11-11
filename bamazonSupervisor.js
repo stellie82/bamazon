@@ -1,24 +1,3 @@
-// Create another Node app called bamazonSupervisor.js. Running this application will list a set of menu options:
-
-// View Product Sales by Department
-// Create New Department
-
-// When a supervisor selects View Product Sales by Department, the app should display a summarized table in their terminal/bash window. Use the table below as a guide.
-
-// department_id
-// department_name
-// over_head_costs
-// product_sales
-// total_profit
-
-// The total_profit column should be calculated on the fly using the difference between over_head_costs and product_sales. total_profit should not be stored in any database. You should use a custom alias.
-// If you can't get the table to display properly after a few hours, then feel free to go back and just add total_profit to the departments table.
-
-// Hint: You may need to look into aliases in MySQL.
-// Hint: You may need to look into GROUP BYs.
-// Hint: You may need to look into JOINS.
-// HINT: There may be an NPM package that can log the table to the console. What's is it? Good question :)
-
 // Required node modules and files
 var inquirer = require("inquirer");
 var mysql = require("mysql");
@@ -69,11 +48,15 @@ function menuOptions() {
 }
 
 function viewSalesDept() {
-    var query = "SELECT departments.department_id, departments.department_name, SUM(products.product_sales) AS product_sales, departments.overhead_costs, SUM(products.product_sales) - departments.overhead_costs AS total_profit FROM products INNER JOIN departments on products.department_name = departments.department_name  GROUP BY departments.department_id, departments.department_name, departments.overhead_costs ORDER BY departments.department_id ASC;";
+    var query = "SELECT departments.department_id, departments.department_name, SUM(products.product_sales) AS product_sales, departments.overhead_costs, SUM(products.product_sales) - departments.overhead_costs AS total_profit FROM departments LEFT JOIN products on departments.department_name = products.department_name  GROUP BY departments.department_id, departments.department_name, departments.overhead_costs ORDER BY departments.department_id ASC;";
     connection.query(query, function (error, response) {
         if (error) throw error;
         var table = new Table({ head: ["Department ID", "Department Name", "Product Sales", "Overhead Costs", "Total Profit"] });
         for (i = 0; i < response.length; i++) {
+            if (!response[i].product_sales && !response[i].total_profit) {
+                response[i].product_sales = 0;
+                response[i].total_profit = response[i].product_sales - response[i].overhead_costs;
+            }
             table.push(
                 [response[i].department_id, response[i].department_name, response[i].product_sales.toFixed(2), response[i].overhead_costs.toFixed(2), response[i].total_profit.toFixed(2)]);
         }
@@ -83,5 +66,29 @@ function viewSalesDept() {
 }
 
 function createDept() {
-    connection.end();
+    inquirer
+        .prompt([
+            {
+                name: "department",
+                type: "input",
+                message: "What is the name of the new department you would like to add?"
+            },
+            {
+                name: "overhead",
+                type: "input",
+                message: "What are the overhead costs for the department"
+            }
+        ]).then(function (answer) {
+            connection.query("INSERT INTO departments SET ?",
+                {
+                    department_name: answer.department,
+                    overhead_costs: answer.overhead
+                }, function (error) {
+                    if (error) throw error;
+                    console.log("Your new department has been added successfully.");
+                    connection.end();
+                })
+        })
 }
+
+
