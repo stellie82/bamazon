@@ -29,11 +29,24 @@ VALUES
     ;
 
 CREATE TABLE departments (
-	department_id INT(10) NOT NULL,
+	department_id INT(10) NOT NULL AUTO_INCREMENT,
     department_name VARCHAR(100),
-    over_head_costs DECIMAL(10,4)
+    product_sales DECIMAL(10,2),
+    overhead_costs DECIMAL(10,2),
+    PRIMARY KEY(department_id)
 );
 
+INSERT INTO departments (department_name, overhead_costs)
+VALUES
+	("Books", 1000),
+    ("Food", 10000),
+    ("Toys", 5000),
+    ("Tools", 500),
+    ("Kitchen", 3000)
+	;
 
 
-SELECT * FROM products;
+SELECT departments.department_id, departments.department_name, SUM(products.product_sales) AS product_sales, departments.overhead_costs,
+SUM(products.product_sales) - departments.overhead_costs AS total_profit
+FROM products INNER JOIN departments on products.department_name = departments.department_name 
+GROUP BY departments.department_id, departments.department_name, departments.overhead_costs
