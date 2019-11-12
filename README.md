@@ -1,4 +1,4 @@
-# Bamazon
+# Bamazon (Node.js & MySQL)
 
 Bamazon is an Amazon-like storefront where customers will be able to view items for sale, request orders, update stock from the inventory, add new products as well as add new departments.  Customers will also be able to view total profit for each of the product departments.
 
