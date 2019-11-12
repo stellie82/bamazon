@@ -31,7 +31,6 @@ VALUES
 CREATE TABLE departments (
 	department_id INT(10) NOT NULL AUTO_INCREMENT,
     department_name VARCHAR(100),
-    product_sales DECIMAL(10,2),
     overhead_costs DECIMAL(10,2),
     PRIMARY KEY(department_id)
 );
