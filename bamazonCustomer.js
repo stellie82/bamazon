@@ -78,7 +78,7 @@ function userPrompt() {
                         ],
                         function (error) {
                             if (error) throw error;
-                            console.log("\nYour item has been purchased successfully.");
+                            console.log("\nYour " + parseInt(answer.quantity) + " item(s) of " + response[0].product_name + " have been purchased successfully.");
                             console.log("The total cost of your purchase today is: $" + (parseInt(answer.quantity) * response[0].price).toFixed(2) + "\n");
                         }
                     )
