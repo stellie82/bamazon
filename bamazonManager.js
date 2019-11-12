@@ -58,6 +58,7 @@ function menuOptions() {
 function viewProducts() {
     connection.query("SELECT * FROM products;", function (error, response) {
         if (error) throw error;
+        // console.log(response);
         console.log("\nProducts for Sale");
         for (i = 0; i < response.length; i++) {
             console.log(
@@ -65,12 +66,17 @@ function viewProducts() {
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +
+                "Product Sales: $" + parseFloat(response[i].product_sales).toFixed(2) + " | " +
                 "Stock quantity: " + response[i].stock_quantity + "\n"
             );
         }
         menuOptions();
     });
 }
+
+
+
+
 
 // Create a function to display all items in the database with an inventory count of less than 5
 function viewInventory() {
@@ -80,11 +86,11 @@ function viewInventory() {
         console.log("\nItems with an inventory count of less than 5:");
         for (i = 0; i < response.length; i++) {
             console.log(
-                "\nID: " + response[i].item_id + " | " +
+                "ID: " + response[i].item_id + " | " +
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price + " | " +
-                "Stock quantity: " + response[i].stock_quantity
+                "Stock quantity: " + response[i].stock_quantity + "\n"
             );
         }
         menuOptions();
