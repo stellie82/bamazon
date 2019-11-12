@@ -5,7 +5,7 @@ Bamazon is an Amazon-like storefront where customers will be able to view items 
 This application is divided into three parts.
 
 ## Customer View
-![customer-view](https://)
+![customer-view](https://github.com/stellie82/bamazon/blob/master/assets/customer-view.gif?raw=true)
 
 The Customer View runs from `node bamazonCustomer.js` where it pulls data from the `products` table in the MySQL database.  Here a customer is able to view:
 * item_id (unique id for each product)
@@ -17,7 +17,7 @@ The Customer View runs from `node bamazonCustomer.js` where it pulls data from t
 The customer will be prompted one of two things: the ID of the product and how many units of the product they would like to purchase.  The application will then check to see if the store has enough inventory to meet the customer's request.  The customer will either be able to see the total cost of their purchase, or a notification that there is not enough of the product in store.
 
 ## Manager View
-![manager-view](https://)
+![manager-view](https://github.com/stellie82/bamazon/blob/master/assets/manager-view.gif?raw=true)
 
 The Manager View runs from `node bamazonManager.js`.  This application will allow the manager to choose from a list of menu options:
 * View Products for Sale
@@ -30,7 +30,7 @@ The Manager View runs from `node bamazonManager.js`.  This application will allo
   * Lastly, a manager will have the ability to add a _new_ product to the store by inputting its name, department name, price and quantity to the database.
 
 ## Supervisor View
-![supervisor-view](https://)
+![supervisor-view](https://github.com/stellie82/bamazon/blob/master/assets/supervisor-view.gif?raw=true)
 
 The Supervisor View runs from `node bamazonSupervisor.js`.  In this part of the application a supervisor will have the option to View Product Sales by Department from the `departments` table in the MySQL database:
 * department_id
