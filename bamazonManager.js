@@ -58,13 +58,14 @@ function menuOptions() {
 function viewProducts() {
     connection.query("SELECT * FROM products;", function (error, response) {
         if (error) throw error;
+        console.log("\nProducts for Sale");
         for (i = 0; i < response.length; i++) {
             console.log(
-                "\nID: " + response[i].item_id + " | " +
+                "ID: " + response[i].item_id + " | " +
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +
-                "Stock quantity: " + response[i].stock_quantity
+                "Stock quantity: " + response[i].stock_quantity + "\n"
             );
         }
         menuOptions();
@@ -73,9 +74,10 @@ function viewProducts() {
 
 // Create a function to display all items in the database with an inventory count of less than 5
 function viewInventory() {
-    var query = "SELECT * FROM products GROUP BY item_id HAVING stock_quantity > 5";
+    var query = "SELECT * FROM products GROUP BY item_id HAVING stock_quantity < 5";
     connection.query(query, function (error, response) {
         if (error) throw error;
+        console.log("\nItems with an inventory count of less than 5:");
         for (i = 0; i < response.length; i++) {
             console.log(
                 "\nID: " + response[i].item_id + " | " +
@@ -126,7 +128,7 @@ function addInventory() {
                     ],
                     function (error) {
                         if (error) throw error;
-                        console.log("Your items have been added successfully");
+                        console.log("\nYour " + parseInt(answer.quantity) + " item(s) of " + response[0].product_name + " have been added to the inventory successfully.\n");
                         connection.end();
                     })
             })
@@ -167,7 +169,7 @@ function addProduct() {
                     stock_quantity: answer.quantity
                 }, function (error) {
                     if (error) throw error;
-                    console.log("Your new item has been added successfully.");
+                    console.log("\nYour new item: " + answer.item + ", has been added to the inventory successfully.\n");
                     connection.end();
                 })
         })

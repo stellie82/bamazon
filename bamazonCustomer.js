@@ -22,14 +22,15 @@ function displayItems() {
     connection.query("SELECT * FROM products;", function (error, response) {
         if (error) throw error;
         // console.log(response);
+        console.log("\nProducts for Sale");
         for (i = 0; i < response.length; i++) {
             console.log(
-                "\nID: " + response[i].item_id + " | " +
+                "ID: " + response[i].item_id + " | " +
                 "Item: " + response[i].product_name + " | " +
                 "Department: " + response[i].department_name + " | " +
                 "Price: $" + response[i].price.toFixed(2) + " | " +
                 "Product Sales: $" + parseFloat(response[i].product_sales).toFixed(2) + " | " +
-                "Stock quantity: " + response[i].stock_quantity
+                "Stock quantity: " + response[i].stock_quantity + "\n"
             );
         }
         userPrompt();
@@ -77,12 +78,12 @@ function userPrompt() {
                         ],
                         function (error) {
                             if (error) throw error;
-                            console.log("Your item has been purchased successfully.");
-                            console.log("The total cost of your purchase today is: $" + (parseInt(answer.quantity) * response[0].price).toFixed(2));
+                            console.log("\nYour item has been purchased successfully.");
+                            console.log("The total cost of your purchase today is: $" + (parseInt(answer.quantity) * response[0].price).toFixed(2) + "\n");
                         }
                     )
                 } else {
-                    console.log("Sorry, there are not enough of those items in stock.");
+                    console.log("\nSorry, there are not enough of those items in stock.\n");
                 };
                 connection.end();
             });

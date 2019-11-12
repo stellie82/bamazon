@@ -51,6 +51,7 @@ function viewSalesDept() {
     var query = "SELECT departments.department_id, departments.department_name, SUM(products.product_sales) AS product_sales, departments.overhead_costs, SUM(products.product_sales) - departments.overhead_costs AS total_profit FROM departments LEFT JOIN products on departments.department_name = products.department_name  GROUP BY departments.department_id, departments.department_name, departments.overhead_costs ORDER BY departments.department_id ASC;";
     connection.query(query, function (error, response) {
         if (error) throw error;
+        console.log("\nProduct Sales by Department");
         var table = new Table({ head: ["Department ID", "Department Name", "Product Sales", "Overhead Costs", "Total Profit"] });
         for (i = 0; i < response.length; i++) {
             if (!response[i].product_sales && !response[i].total_profit) {
@@ -85,7 +86,7 @@ function createDept() {
                     overhead_costs: answer.overhead
                 }, function (error) {
                     if (error) throw error;
-                    console.log("Your new department has been added successfully.");
+                    console.log("\nYour new department: " + answer.department + ", has been added successfully.\n");
                     connection.end();
                 })
         })
